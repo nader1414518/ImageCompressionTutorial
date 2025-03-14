@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_compression/controllers/storage_controller.dart';
 
@@ -73,7 +74,29 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
-              children: [],
+              children: [
+                ...photos.map(
+                  (photo) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                    ),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width - 20,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          15,
+                        ),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            photo["url"].toString(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
     );
   }
