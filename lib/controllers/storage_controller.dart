@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_compression/utils/image_utility.dart';
 
 class StorageController {
   static Future<Map<String, dynamic>> uploadPhoto(
@@ -11,12 +12,18 @@ class StorageController {
       var filename =
           "${DateTime.now().toIso8601String().replaceAll(" ", "").replaceAll(":", "").replaceAll(".", "").replaceAll("T", "").replaceAll("Z", "")}.webp";
 
+      var compressedFile = await ImageUtility.compressImage(file);
+
       var res = await FirebaseStorage.instance
           .ref("Photos")
           .child(
             filename,
           )
-          .putFile(file);
+          .putFile(
+            File(
+              compressedFile!.path,
+            ),
+          );
 
       await FirebaseFirestore.instance.collection("Photos").add({
         "filename": filename,

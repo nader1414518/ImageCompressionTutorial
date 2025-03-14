@@ -97,7 +97,48 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
             icon: const Icon(
-              Icons.add_circle_outline,
+              Icons.camera,
+            ),
+          ),
+          IconButton(
+            onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
+
+              try {
+                var imagePicker = ImagePicker();
+
+                var file = await imagePicker.pickImage(
+                  source: ImageSource.gallery,
+                  imageQuality: 50,
+                );
+
+                if (file != null) {
+                  var res = await StorageController.uploadPhoto(
+                    File(
+                      file.path,
+                    ),
+                  );
+
+                  if (res["result"] == true) {
+                    await getData();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: res["message"].toString(),
+                    );
+                  }
+                }
+              } catch (e) {
+                print(e.toString());
+              }
+
+              setState(() {
+                isLoading = false;
+              });
+            },
+            icon: const Icon(
+              Icons.photo_library_outlined,
             ),
           ),
         ],
@@ -120,7 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 5,
                     ),
                     child: Container(
-                      width: MediaQuery.sizeOf(context).width - 20,
                       height: 200,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -130,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           image: CachedNetworkImageProvider(
                             photo["url"].toString(),
                           ),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
