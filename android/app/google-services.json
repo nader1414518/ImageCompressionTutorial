@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225502020729",
+    "project_id": "imagecompressiontutorial",
+    "storage_bucket": "imagecompressiontutorial.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225502020729:android:40e457399f4c4cf0ec00a8",
+        "android_client_info": {
+          "package_name": "com.yt.image_compression"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHMjqkH0_XPihZtBLF6c1zb56lD4bp_ho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

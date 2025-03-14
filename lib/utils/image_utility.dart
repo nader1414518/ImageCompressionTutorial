@@ -7,8 +7,11 @@ class ImageUtility {
     try {
       final filePath = inputFile.absolute.path;
 
+      print(">>>>>>>> Size before compression: " +
+          (await getFileSizeInMB(filePath)).toString() +
+          " MBs");
+
       // Create output file path
-      // eg:- "Volume/VM/abcd_out.jpeg"
       var baseName = path.basename(filePath);
       var extension = path.extension(filePath);
       final outPath =
@@ -20,10 +23,27 @@ class ImageUtility {
         format: CompressFormat.webp,
       );
 
+      print(">>>>>>>>>> Size after compression: " +
+          (await getFileSizeInMB(result!.path)).toString() +
+          " MBs");
+
       return result;
     } catch (e) {
       print(e.toString());
       return null;
     }
+  }
+
+  static Future<int> getFileSize(String filePath) async {
+    File file = File(filePath);
+    int size = await file.length();
+    return size; // Size in bytes
+  }
+
+  static Future<double> getFileSizeInMB(String filePath) async {
+    File file = File(filePath);
+    int sizeInBytes = await file.length();
+    double sizeInMB = sizeInBytes / (1024 * 1024); // Convert bytes to MB
+    return sizeInMB;
   }
 }
