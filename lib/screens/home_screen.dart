@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_compression/controllers/storage_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -56,7 +60,42 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
+
+              try {
+                var imagePicker = ImagePicker();
+
+                var file = await imagePicker.pickImage(
+                  source: ImageSource.camera,
+                  imageQuality: 50,
+                );
+
+                if (file != null) {
+                  var res = await StorageController.uploadPhoto(
+                    File(
+                      file.path,
+                    ),
+                  );
+
+                  if (res["result"] == true) {
+                    await getData();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: res["message"].toString(),
+                    );
+                  }
+                }
+              } catch (e) {
+                print(e.toString());
+              }
+
+              setState(() {
+                isLoading = false;
+              });
+            },
             icon: const Icon(
               Icons.add_circle_outline,
             ),
