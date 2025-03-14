@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_compression/controllers/storage_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -6,10 +7,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoading = false;
+
+  List<Map<String, dynamic>> photos = [];
+
+  Future<void> getData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var res = await StorageController.getPhotos();
+
+      setState(() {
+        photos = res;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getData();
   }
 
   @override
@@ -26,16 +53,28 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text(
           "Home Screen",
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.add_circle_outline,
+            ),
+          ),
+        ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 10,
-        ),
-        shrinkWrap: true,
-        physics: const ClampingScrollPhysics(),
-        children: [],
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 10,
+              ),
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              children: [],
+            ),
     );
   }
 }
