@@ -8,7 +8,6 @@ class ImageUtility {
       final filePath = inputFile.absolute.path;
 
       // Create output file path
-      // eg:- "Volume/VM/abcd_out.jpeg"
       var baseName = path.basename(filePath);
       var extension = path.extension(filePath);
       final outPath =
