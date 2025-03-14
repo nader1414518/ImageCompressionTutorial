@@ -11,13 +11,16 @@ class StorageController {
       var filename =
           "${DateTime.now().toIso8601String().replaceAll(" ", "").replaceAll(":", "").replaceAll(".", "").replaceAll("T", "").replaceAll("Z", "")}.webp";
 
-      var res = await FirebaseStorage.instance.ref("Photos").child(
+      var res = await FirebaseStorage.instance
+          .ref("Photos")
+          .child(
             filename,
-          );
+          )
+          .putFile(file);
 
       await FirebaseFirestore.instance.collection("Photos").add({
         "filename": filename,
-        "url": await res.getDownloadURL(),
+        "url": await res.ref.getDownloadURL(),
         "dateAdded": DateTime.now().toIso8601String(),
       });
 
@@ -31,6 +34,24 @@ class StorageController {
         "result": false,
         "message": e.toString(),
       };
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getPhotos() async {
+    try {
+      var res = await FirebaseFirestore.instance.collection("Photos").get();
+
+      return res.docs
+          .map(
+            (doc) => {
+              ...doc.data(),
+              "id": doc.id,
+            },
+          )
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
     }
   }
 }
