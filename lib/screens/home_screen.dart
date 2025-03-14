@@ -27,6 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
           "Home Screen",
         ),
       ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 10,
+        ),
+        shrinkWrap: true,
+        physics: const ClampingScrollPhysics(),
+        children: [],
+      ),
     );
   }
 }
